@@ -1,3 +1,5 @@
+from modelos.avaliacao import Avaliacao
+
 # classe
 class Restaurante:
     # uma lista que guarda todos os restaurantes cadastrados
@@ -7,63 +9,46 @@ class Restaurante:
     # self diz que e o atributo deste objeto
     # def __init__ diz que e o metodo construtor desta classe 
     # metodos do python sempre possuem 2 undercore antes e depois
-    def __init__(self, _nome, _categoria):
-        self.nome = _nome.title() # coloque a primeira letra em maiscula
-        self.categoria = _categoria.upper() # coloca a categoria com todas as letras maisculas
+    def __init__(self, nome, categoria):
+        self._nome = nome.title() # coloque a primeira letra em maiscula
+        self._categoria = categoria.upper() # coloca a categoria com todas as letras maisculas
         # utilizar o '_' para 'informar' que este atributo nao deve ser alterado pelo usuario
-        self._ativo = False
+        self.ativo = False
         # quando um objeto for criado, ele sera adicionado a lista de restaurantes
         Restaurante.restaurantes.append(self)
+        self._avaliacao = []
     
     # lista todos os restaurantes cadastrados
     @classmethod # informa que e um metodo que podemos utilizar sem instanciar um objeto
     def listar_todos_restaurantes(cls):
-        print(f'{('nome do restaurante').ljust(20)} | {('categoria').ljust(20)} | {'status'}')
+        print(f'{('nome do restaurante').ljust(20)} | {('categoria').ljust(20)} | {('avaliacao').ljust(20)} | {'status'}')
         for r in cls.restaurantes:
-            print(f'{r.nome.ljust(20)} | {r.categoria.ljust(20)} | {(r.ativo)} ')
-    
+            print(f'{r._nome.ljust(20)} | {r._categoria.ljust(20)} | {str(r.media_avaliacoes).ljust(20)} | {(r._ativo)} ')
+
     # sobreescreve o atributo
     @property
-    def ativo(self):
-        return 'ativado' if (self._ativo) else 'desativado'
+    def _ativo(self):
+        return 'ativado' if (self.ativo) else 'desativado'
     
     # metodo para trocar o status do restaurante usando o NOT
     def alternar_status(self):
-        self._ativo = not self._ativo
+        self.ativo = not self.ativo
     
     # self e a referencia da instancia atual que esta usando o metodo no momento
     # def __str__(self): sobrescreve a string do objeto, ao inves de mostrar a posicao na memoria
     # metodos do python sempre possuem 2 undercore antes e depois
     def __str__(self):
-        return self.nome
+        return self._nome
+    
+    def receber_avaliacao(self, cliente, nota_avaliacao):
+        nota = Avaliacao(cliente, nota_avaliacao)
+        self._avaliacao.append(nota)
 
-# instanciacao da classe com metodo construtor
-restaurante_praca = Restaurante('praça', 'gourmet')
-restaurante_pizza = Restaurante('pizza Express', 'italiana')
-
-# trocando valores aos atributos da classe
-restaurante_praca.nome = 'estadio'
-restaurante_pizza.categoria = 'bola'
-
-# colocando os restaurantes numa lista
-restaurantes = [restaurante_praca, restaurante_pizza]
-
-# metodo 'vars', mostra os atributos do objeto em forma de 'dicionario'
-# se nao usado, sera mostrado a posicao deste objeto na memoria fisica
-print()
-print('dicionario do objeto')
-print(vars(restaurante_praca))
-print(vars(restaurante_pizza))
-
-# depois de aplicar o __str__ (self) foi sobrescrito a string do objeto, ao inves de mostrar a posicao na memoria 
-print()
-print('string do objeto sobrescrita')
-print(restaurante_praca)
-print(restaurante_pizza)
-
-# trocando o status do restaurante
-restaurante_praca.alternar_status()
-
-print()
-print('lisgem com todos os restaurantes cadastrados')
-Restaurante.listar_todos_restaurantes()
+    @property
+    def media_avaliacoes(self):
+        if not self._avaliacao:
+            return 0
+        soma_notas = sum(avaliacao._nota for avaliacao in self._avaliacao)
+        qtd_notas = len(self._avaliacao)
+        media = round(soma_notas / qtd_notas, 1)
+        return media
