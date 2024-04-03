@@ -2,6 +2,7 @@
 from modelos.restaurante import Restaurante
 from modelos.cardapio.bebida import Bebida
 from modelos.cardapio.prato import Prato
+from modelos.cardapio.sobremesa import Sobremesa
 
 # instanciacao da classe com metodo construtor
 restaurante_praca = Restaurante('praça', 'gourmet')
@@ -43,9 +44,16 @@ restaurante_praca._nome = 'pracinha'
 
 bebida_suco = Bebida('suco', 3.5, 'enorme')
 prato_lasanha = Prato('lasanha', 27, 'lasanha a bolonhesa')
+sobremesa_sorvete = Sobremesa('sorvete', 10, 'chocolate', 'palito')
+
+bebida_suco.aplicar_desconto()
+prato_lasanha.aplicar_desconto()
+sobremesa_sorvete.aplicar_desconto()
+
 # neste caso, a funcao 'adicionar_cardapio' e uma funcao que funciona para varias classes derivadas(herança) de 'ItemCardapio'
 restaurante_praca.adicionar_cardapio(bebida_suco)
 restaurante_praca.adicionar_cardapio(prato_lasanha)
+restaurante_praca.adicionar_cardapio(sobremesa_sorvete)
 
 def main():
     Restaurante.listar_todos_restaurantes()

@@ -48,9 +48,11 @@ class Restaurante:
     @property
     def exibir_itens_cardapio(self):
         print (f'Cardapio do Restaurante: {self._nome}')
-        print (f'{'**nome do item'.ljust(30)} | {'**preco'.ljust(26)} | {'**observacoes'.ljust(20)}')
+        print (f'{'**nome do item'.ljust(30)} | {'**preco'.ljust(27)} | **observacoes')
+        # sera percorrido cada objeto, de forma enumarada, comecando de 01
         for id , item in enumerate(self._cardapio, start=1):
-            mensagem = f'{id} - item: {item._nome.ljust(20)} | preco {str(item._preco).ljust(20)} | {item.tamanho if hasattr(item, 'tamanho') else item.descricao} '
+            # como os itens do cardapio possuem observacoes diferentes ('tamanho' e 'descricao') devido ao ao 'isinstance' no metodo 'adicionar_cardapio', validamos o objeto a ser listado atraves do 'hasattr'
+            mensagem = f'{id} - item: {item._nome.ljust(20)} | preco: {str(item._preco).ljust(20)} | {'tamanho: ' + item.tamanho if hasattr(item, 'tamanho') else 'descricao: '+item.descricao.ljust(20)} {'| tipo: ' +item.tipo if hasattr(item, 'tipo') else ''} '
             print(mensagem)
         print()
 

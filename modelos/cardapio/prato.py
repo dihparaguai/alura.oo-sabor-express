@@ -4,3 +4,7 @@ class Prato(ItemCardapio):
     def __init__(self, nome, preco, descricao):
         super().__init__(nome, preco)
         self.descricao = descricao
+
+    # metodo obrigatorio devido o 'metodo abstrata' na classe pai
+    def aplicar_desconto(self):
+        self._preco -= (self._preco * 0.8)
